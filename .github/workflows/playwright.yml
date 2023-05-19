@@ -40,13 +40,6 @@ jobs:
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
         run: pnpm exec playwright test
-      - name: upload snapshots for prepare update baseline
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: snapshots_${{ github.event.pull_request.number }}
-          path: playwright/screenshots
-          retention-days: 30
       # If you want to view the report via artifact, you need to manually download the zip once and view it.
       # If you want to browse via url, you can easily browse by uploading to aws s3, gcp gcs, etc.
       - uses: actions/upload-artifact@v3

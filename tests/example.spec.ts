@@ -8,6 +8,7 @@ test("has title", async ({ page }) => {
 
   // vrt test
   await expect(page).toHaveScreenshot();
+  await expect(page).toHaveScreenshot("aaaa.png");
 });
 
 test("get started link", async ({ page }) => {
@@ -20,5 +21,7 @@ test("get started link", async ({ page }) => {
   await expect(page).toHaveURL(/.*intro/);
 
   // vrt test
+  await expect(page).toHaveScreenshot();
+  await expect(page).toHaveScreenshot();
   await expect(page).toHaveScreenshot();
 });
