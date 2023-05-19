@@ -6,7 +6,9 @@ on:
       uploadName:
         required: true
         default: "baseline_main"
-
+permissions:
+  contents: read
+  actions: write
 jobs:
   upload:
     timeout-minutes: 60

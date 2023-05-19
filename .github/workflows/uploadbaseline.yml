@@ -3,7 +3,9 @@ name: "Upload Baseline Image"
 on:
   pull_request:
     types: [closed]
-
+permissions:
+  contents: read
+  actions: write
 jobs:
   upload:
     runs-on: ubuntu-latest
