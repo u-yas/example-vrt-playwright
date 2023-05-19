@@ -1,0 +1,30 @@
+---
+name: "VRT Support"
+description: "Visual Regression Testing Support Commands"
+inputs:
+  cmd:
+    description: "Command. support: 'prepare', 'report', 'uploadBaseline', 'approve'"
+    required: true
+  vrt:
+    description: "Visual Regression Testing Tool Name. support: 'playwright'"
+    required: false
+  reportUrl:
+    description: "Url of testing report. e.g. https://s3bucket.s3.reagion.amazonaws.com/report.html"
+    required: false
+  baselineLocalPath:
+    description: "Local path of baseline images. e.g. ./baseline"
+    required: false
+  downloadBaselineUrl:
+    description: "Remote path of baseline images. e.g. https://s3bucket.s3.reagion.amazonaws.com/baseline/main/"
+    required: false
+  uploadActualUrl:
+    description: "Remote path of actual images. e.g. https://s3bucket.s3.reagion.amazonaws.com/actual/main/"
+    required: false
+  uploadFromLocalPath:
+    description: "Local path of actual images. e.g. ./actual/"
+    required: false
+runs:
+  using: "node16"
+  main: "dist/index.js"
+author: "u-yas"
+

@@ -1,0 +1,37 @@
+---
+name: "Upload Baseline Image"
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event.pull_request.merged == true
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download baseline snapshots
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARTIFACT_NAME: snapshots_${{ github.event.pull_request.number }}
+        run: |
+          # actions/download-artifact@v3 does not support downloading artifacts from workflow.
+          # issues: https://github.com/actions/toolkit/issues/501
+          # so, use gh cli.
+          artifact_id=$(gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${{ github.repository_owner}}/${{ github.repository }}/actions/artifacts?name=${{ env.ARTIFACT_NAME }}" \
+          | jq -r '.artifacts[0].id')
+          gh api \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
+          "/repos/${{ github.repository_owner}}/${{ github.repository }}/actions/artifacts/${artifact_id}/zip" >> baseline.zip
+          unzip baseline.zip -d playwright/screenshots
+          rm -rf baseline.zip
+      - name: Upload artifact for baseline
+        uses: actions/upload-artifact@v2
+        with:
+          name: baseline_${{ github.base_ref }}
+          path: playwright/screenshots
