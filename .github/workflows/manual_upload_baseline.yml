@@ -1,0 +1,32 @@
+---
+name: "Upload baseline snapshot manually"
+on:
+  workflow_dispatch:
+    inputs:
+      uploadName:
+        required: true
+        default: "baseline_main"
+
+jobs:
+  upload:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+      - uses: pnpm/action-setup@v2
+      - run: pnpm install
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+      - name: Run Playwright tests
+        run: pnpm exec playwright test --config ./playwright.config.ts --update-snapshots
+      - name: debug
+        run: tree playwright
+      - name: upload snapshots
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ github.event.inputs.uploadName }}
+          path: playwright/screenshots
+          retention-days: 30
